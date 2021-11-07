@@ -35,8 +35,8 @@ class Pomodoro:
         self.time_label = tk.Entry(self.frame, textvariable=self.time_string, font=(None, 40,), width=0)
 
         self.display_on_window()
+        self.update_time()
         self.window_config()
-        self.update_time(self.time)
 
     def display_on_window(self):
         self.time_label.grid(row=1, column=1, pady=25)
@@ -68,7 +68,7 @@ class Pomodoro:
     def reset(self):
         self.stop()
         self.time = self.times[self.control]
-        self.update_time(self.time)
+        self.update_time()
 
 
     def short_break(self):
@@ -87,16 +87,16 @@ class Pomodoro:
 
     def timer(self):
         if self.run and self.time > 0:
-            self.time -= 1
-            self.update_time(self.time)
+            self.time -= SECOND
+            self.update_time()
             self.thread = threading.Timer(SECOND, self.timer)
             self.thread.start()
+
         if self.time == 0:
             self.master.attributes("-topmost", True)
             self.master.attributes("-topmost", False)
 
-    def update_time(self, new_total):
-        self.time = new_total
+    def update_time(self):
         minutes, seconds = divmod(self.time, MINUTE_IN_SECONDS)
         self.time_string.set(f"{minutes:>02}:{seconds:>02}")
 
