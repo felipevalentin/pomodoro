@@ -7,36 +7,71 @@ DEFAULT_FOCUS = 25 * MINUTE_IN_SECONDS
 DEFAULT_SHORT = 5 * MINUTE_IN_SECONDS
 DEFAULT_LONG = 10 * MINUTE_IN_SECONDS
 
-class Pomodoro:
-    def __init__(self, master):
-        self.master = master
-        self.frame = tk.Frame(self.master)
 
-        # Timer
+class Timer():
+    def __init__(self):
         self.time = DEFAULT_FOCUS
-        self.times = {"focus": DEFAULT_FOCUS,
-                      "short": DEFAULT_SHORT,
-                      "long": DEFAULT_LONG}
+        self.times = {"reset": self.time,
+                      "focus": DEFAULT_FOCUS,
+                      "long": DEFAULT_LONG,
+                      "short": DEFAULT_SHORT}
+        self.run = False
+        self.thread = None
         self.control = "focus"
         self.time = self.times[self.control]
-        self.time_string = tk.StringVar()
-        self.thread = None
-        self.run = False
+
+    def start(self, func):
+        if not self.run:
+            self.run = True
+            self.timer_with_call(func)
+
+    def timer_with_call(self, func):
+        if self.run and self.time > 0:
+            self.time -= SECOND
+            func()
+            self.thread = threading.Timer(SECOND, self.timer_with_call, [func])
+            self.thread.start()
+    
+    def stop(self):
+        if self.run:
+            self.run = False
+            self.thread.cancel()
+    
+    def reset(self):
+        self.control = "reset"
+
+    @property
+    def control(self):
+        return self.__control
+
+    @control.setter
+    def control(self, control):
+        self.stop()
+        self.__control = control
+        self.time = self.times[control]
+
+class Pomodoro:
+    def __init__(self):
+        self.master = tk.Tk()
+        self.frame = tk.Frame(self.master)
+        self.timer = Timer()
 
         # Buttons
-        self.focus_button = tk.Button(self.frame, text='Focus', command=self.focus, width=17)
-        self.long_break_button = tk.Button(self.frame, text='Long Break', command=self.long_break, width=17)
-        self.reset_button = tk.Button(self.frame, text='reset', command=self.reset, width=17)
-        self.short_break_button = tk.Button(self.frame, text='Short Break', command=self.short_break, width=17)
+        self.focus_button = tk.Button(self.frame, text='Focus', command=lambda: self.change_control("focus") , width=17)
+        self.long_break_button = tk.Button(self.frame, text='Long Break', command=lambda: self.change_control("long"), width=17)
+        self.reset_button = tk.Button(self.frame, text='reset', command=lambda: self.change_control("reset"), width=17)
+        self.short_break_button = tk.Button(self.frame, text='Short Break', command=lambda: self.change_control("short"), width=17)
         self.start_button = tk.Button(self.frame, text='start', command=self.start, width=17)
         self.stop_button = tk.Button(self.frame, text='stop', command=self.stop, width=17)
 
         # Labels
+        self.time_string = tk.StringVar()
         self.time_label = tk.Entry(self.frame, textvariable=self.time_string, font=(None, 40,), width=0)
 
         self.display_on_window()
         self.update_time()
         self.window_config()
+        self.master.mainloop()
 
     def display_on_window(self):
         self.time_label.grid(row=1, column=1, pady=25)
@@ -53,58 +88,31 @@ class Pomodoro:
         self.master.geometry("500x185")
         self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
 
-    def focus(self):
-        self.control = "focus"
-        self.reset()
-
-    def long_break(self):
-        self.control = "long"
-        self.reset()
-
-    def on_closing(self):
-        self.stop()
-        self.master.destroy()
-
-    def reset(self):
-        self.stop()
-        self.time = self.times[self.control]
+    def change_control(self, control):
+        self.timer.control = control
         self.update_time()
 
-
-    def short_break(self):
-        self.control = "short"
-        self.reset()
+    def on_closing(self):
+        self.timer.stop()
+        self.master.destroy()
 
     def start(self):
-        if not self.run:
-            self.run = True
-            self.timer()
+        self.timer.start(self.update_time)
 
     def stop(self):
-        if self.run:
-            self.run = False
-            self.thread.cancel()
+        self.timer.stop()
 
-    def timer(self):
-        if self.run and self.time > 0:
-            self.time -= SECOND
-            self.update_time()
-            self.thread = threading.Timer(SECOND, self.timer)
-            self.thread.start()
-
-        if self.time == 0:
+    def update_time(self):
+        time = self.timer.time
+        min, sec = divmod(time, MINUTE_IN_SECONDS)
+        self.time_string.set(f"{min:>02}:{sec:>02}")
+        if time == 0:
             self.master.attributes("-topmost", True)
             self.master.attributes("-topmost", False)
 
-    def update_time(self):
-        minutes, seconds = divmod(self.time, MINUTE_IN_SECONDS)
-        self.time_string.set(f"{minutes:>02}:{seconds:>02}")
-
 
 def main():
-    root = tk.Tk()
-    app = Pomodoro(root)
-    root.mainloop()
+    app = Pomodoro()
 
 
 if __name__ == '__main__':
