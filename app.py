@@ -11,10 +11,10 @@ class Pomodoro:
         self.frame = tk.Frame(self.master)
 
         # Timer
-        self.time_thread = threading.Thread()
         self.time = 25*60
         self.time_string = tk.StringVar()
-        self.run = True
+        self.thread = None
+        self.run = False
 
         # Buttons
         self.focus_button = tk.Button(self.frame, text = 'Focus', command=self.focus, width=17)
@@ -55,9 +55,7 @@ class Pomodoro:
         self.start()
 
     def on_closing(self):
-        if self.time_thread.is_alive():
-            self.run = False
-            self.time_thread.join()
+        self.stop()
         self.master.destroy()
 
     def reset(self):
@@ -69,20 +67,22 @@ class Pomodoro:
         self.start()
 
     def start(self):
-        if self.time_thread.is_alive():
-            return
-        self.update_entry()
-        self.run = True
-        self.time_thread = threading.Thread(target=self.timer)
-        self.time_thread.start()
+        if not self.run:
+            self.update_entry()
+            self.run = True
+            self.timer()
 
     def stop(self):
-        self.run = False
+        if self.run:
+            self.run = False
+            self.thread.cancel()
 
     def timer(self):
-        while self.run and self.time > 0:
-            self.update_time(self.time - 1)
-            time.sleep(1)
+        if self.run and self.time > 0:
+            self.time -= 1
+            self.update_time(self.time)
+            self.thread = threading.Timer(1, self.timer)
+            self.thread.start()
         if self.time == 0:
             self.master.attributes("-topmost", True)
             self.master.attributes("-topmost", False)
