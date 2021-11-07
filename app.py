@@ -23,6 +23,15 @@ class Pomodoro:
         self.start_button = tk.Button(self.frame, text = 'start', command = self.start, width=17)
         self.stop_button = tk.Button(self.frame, text = 'stop', command = self.stop, width=17)
         self.reset_button = tk.Button(self.frame, text = 'reset', command = self.reset, width=17)
+        self.display_on_window()
+        self.run = True
+        self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
+    
+    def window_config(self):
+        self.master.title("Pomodoro")
+        self.master.geometry("500x185")
+
+    def display_on_window(self):
         self.time_label.grid(row=1, column=1, pady=25)
         self.focus_button.grid(row=0, column=0)
         self.short_break_button.grid(row=0, column=1)
@@ -31,14 +40,6 @@ class Pomodoro:
         self.stop_button.grid(row=2, column=1)
         self.reset_button.grid(row=2, column=2)
         self.frame.pack()
-
-        self.run = True
-        self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
-    
-    def window_config(self):
-        self.master.title("Pomodoro")
-        self.master.geometry("500x185")
-
 
     def start(self):
         if self.time_thread.is_alive():
