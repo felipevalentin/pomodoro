@@ -1,6 +1,11 @@
 import tkinter as tk
 import threading
 
+SECOND = 1
+MINUTE_IN_SECONDS = 60 * SECOND
+DEFAULT_FOCUS = 25 * MINUTE_IN_SECONDS
+DEFAULT_SHORT = 5 * MINUTE_IN_SECONDS
+DEFAULT_LONG = 10 * MINUTE_IN_SECONDS
 
 class Pomodoro:
     def __init__(self, master):
@@ -8,7 +13,7 @@ class Pomodoro:
         self.frame = tk.Frame(self.master)
 
         # Timer
-        self.time = 25*60
+        self.time = DEFAULT_FOCUS
         self.time_string = tk.StringVar()
         self.thread = None
         self.run = False
@@ -44,11 +49,11 @@ class Pomodoro:
         self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def focus(self):
-        self.update_time(25*60)
+        self.update_time(DEFAULT_FOCUS)
         self.start()
 
     def long_break(self):
-        self.update_time(10*60)
+        self.update_time(DEFAULT_LONG)
         self.start()
 
     def on_closing(self):
@@ -57,10 +62,10 @@ class Pomodoro:
 
     def reset(self):
         self.stop()
-        self.update_time(25*60)
+        self.update_time(DEFAULT_FOCUS)
 
     def short_break(self):
-        self.update_time(5*60)
+        self.update_time(DEFAULT_SHORT)
         self.start()
 
     def start(self):
@@ -77,7 +82,7 @@ class Pomodoro:
         if self.run and self.time > 0:
             self.time -= 1
             self.update_time(self.time)
-            self.thread = threading.Timer(1, self.timer)
+            self.thread = threading.Timer(SECOND, self.timer)
             self.thread.start()
         if self.time == 0:
             self.master.attributes("-topmost", True)
@@ -85,7 +90,7 @@ class Pomodoro:
 
     def update_time(self, new_total):
         self.time = new_total
-        minutes, seconds = divmod(self.time, 60)
+        minutes, seconds = divmod(self.time, MINUTE_IN_SECONDS)
         self.time_string.set(f"{minutes:>02}:{seconds:>02}")
 
 
