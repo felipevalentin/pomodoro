@@ -1,7 +1,4 @@
 import tkinter as tk
-
-import time
-
 import threading
 
 
@@ -68,7 +65,6 @@ class Pomodoro:
 
     def start(self):
         if not self.run:
-            self.update_entry()
             self.run = True
             self.timer()
 
@@ -91,11 +87,6 @@ class Pomodoro:
         self.time = new_total
         minutes, seconds = divmod(self.time, 60)
         self.time_string.set(f"{minutes:>02}:{seconds:>02}")
-
-    def update_entry(self):
-        minutos, segundos = self.time_label.get().split(":")
-        self.update_time(int(minutos) * 60 + int(segundos))
-
 
 def main(): 
     root = tk.Tk()
