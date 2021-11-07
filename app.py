@@ -9,8 +9,7 @@ import threading
 class Pomodoro:
     def __init__(self, master):
         self.master = master
-        self.master.title("Pomodoro")
-        self.master.geometry("500x185")
+        self.window_config()
 
         self.frame = tk.Frame(self.master)
         self.time_thread = threading.Thread()
@@ -38,6 +37,11 @@ class Pomodoro:
 
         self.run = True
         self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
+    
+    def window_config(self):
+        self.master.title("Pomodoro")
+        self.master.geometry("500x185")
+
 
     def start(self):
         if self.time_thread.is_alive():
