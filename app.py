@@ -14,12 +14,12 @@ class Pomodoro:
         self.run = False
 
         # Buttons
-        self.focus_button = tk.Button(self.frame, text = 'Focus', command=self.focus, width=17)
-        self.long_break_button = tk.Button(self.frame, text = 'Long Break', command=self.long_break, width=17)
-        self.reset_button = tk.Button(self.frame, text = 'reset', command = self.reset, width=17)
-        self.short_break_button = tk.Button(self.frame, text = 'Short Break', command=self.short_break, width=17)
-        self.start_button = tk.Button(self.frame, text = 'start', command = self.start, width=17)
-        self.stop_button = tk.Button(self.frame, text = 'stop', command = self.stop, width=17)
+        self.focus_button = tk.Button(self.frame, text='Focus', command=self.focus, width=17)
+        self.long_break_button = tk.Button(self.frame, text='Long Break', command=self.long_break, width=17)
+        self.reset_button = tk.Button(self.frame, text='reset', command=self.reset, width=17)
+        self.short_break_button = tk.Button(self.frame, text='Short Break', command=self.short_break, width=17)
+        self.start_button = tk.Button(self.frame, text='start', command=self.start, width=17)
+        self.stop_button = tk.Button(self.frame, text='stop', command=self.stop, width=17)
 
         # Labels
         self.time_label = tk.Entry(self.frame, textvariable=self.time_string, font=(None, 40,), width=0)
@@ -88,10 +88,12 @@ class Pomodoro:
         minutes, seconds = divmod(self.time, 60)
         self.time_string.set(f"{minutes:>02}:{seconds:>02}")
 
-def main(): 
+
+def main():
     root = tk.Tk()
     app = Pomodoro(root)
     root.mainloop()
+
 
 if __name__ == '__main__':
     main()
