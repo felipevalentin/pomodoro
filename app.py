@@ -12,11 +12,9 @@ class Pomodoro:
 
         self.frame = tk.Frame(self.master)
         self.time_thread = threading.Thread()
-        self.total = 25*60
-        self.minutes = 0
-        self.seconds = 0
+        self.time = 25*60
         self.time_string = tk.StringVar()
-        self.update_time(self.total)
+        self.update_time(self.time)
 
         self.time_label = tk.Entry(self.frame, textvariable=self.time_string, font=(None, 40,), width=0)
         self.focus_button = tk.Button(self.frame, text = 'Focus', command=self.focus, width=17)
@@ -58,10 +56,10 @@ class Pomodoro:
         self.update_time(25*60)
 
     def timer(self):
-        while self.run and self.total > 0:
-            self.update_time(self.total - 1)
+        while self.run and self.time > 0:
+            self.update_time(self.time - 1)
             time.sleep(1)
-        if self.total == 0:
+        if self.time == 0:
             self.master.attributes("-topmost", True)
             self.master.attributes("-topmost", False)
     
@@ -72,9 +70,9 @@ class Pomodoro:
         self.master.destroy()
 
     def update_time(self, new_total):
-        self.total = new_total
-        self.minutes, self.seconds = divmod(self.total, 60)
-        self.time_string.set(f"{self.minutes:>02}:{self.seconds:>02}")
+        self.time = new_total
+        minutes, seconds = divmod(self.time, 60)
+        self.time_string.set(f"{minutes:>02}:{seconds:>02}")
 
     def update_entry(self):
         minutos, segundos = self.time_label.get().split(":")
