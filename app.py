@@ -58,16 +58,18 @@ class Pomodoro:
         self.timer = Timer()
 
         # Buttons
-        self.focus_button = tk.Button(self.frame, text='Focus', command=lambda: self.change_control("focus"), width=17)
-        self.long_break_button = tk.Button(self.frame, text='Long Break', command=lambda: self.change_control("long"), width=17)
-        self.reset_button = tk.Button(self.frame, text='reset', command=lambda: self.change_control("reset"), width=17)
-        self.short_break_button = tk.Button(self.frame, text='Short Break', command=lambda: self.change_control("short"), width=17)
-        self.start_button = tk.Button(self.frame, text='start', command=self.start, width=17)
-        self.stop_button = tk.Button(self.frame, text='stop', command=self.stop, width=17)
+        button_width = 15
+        button_collor = "#d8d8d8"
+        self.focus_button = tk.Button(self.frame, text='Focus', command=lambda: self.change_control("focus"), width=button_width, border="0", bg=button_collor)
+        self.long_break_button = tk.Button(self.frame, text='Long Break', command=lambda: self.change_control("long"), width=button_width, border="0", bg=button_collor)
+        self.reset_button = tk.Button(self.frame, text='Reset', command=lambda: self.change_control("reset"), width=button_width, border="0", bg=button_collor)
+        self.short_break_button = tk.Button(self.frame, text='Short Break', command=lambda: self.change_control("short"), width=button_width, border="0", bg=button_collor)
+        self.start_button = tk.Button(self.frame, text='Start', command=self.start, width=button_width, border="0", bg=button_collor)
+        self.stop_button = tk.Button(self.frame, text='Stop', command=self.stop, width=button_width, border="0", bg=button_collor)
 
         # Labels
         self.time_string = tk.StringVar()
-        self.time_label = tk.Label(self.frame, textvariable=self.time_string, font=(None, 40,), width=0)
+        self.time_label = tk.Label(self.frame, textvariable=self.time_string, font=(None, 37,), width=0)
 
         self.display_on_window()
         self.update_time()
@@ -75,18 +77,23 @@ class Pomodoro:
         self.master.mainloop()
 
     def display_on_window(self):
-        self.time_label.grid(row=1, column=1, pady=25)
+        self.time_label.grid(row=1, column=1, pady=17)
         self.focus_button.grid(row=0, column=0)
         self.short_break_button.grid(row=0, column=1)
         self.long_break_button.grid(row=0, column=2)
         self.start_button.grid(row=2, column=0)
         self.stop_button.grid(row=2, column=1)
         self.reset_button.grid(row=2, column=2)
-        self.frame.pack()
+        self.frame.pack(pady=1, padx=1)
 
     def window_config(self):
         self.master.title("Pomodoro")
-        self.master.geometry("500x185")
+        self.master.geometry("440x156")
+        self.master.resizable(width=False, height=False)
+        background_color = "#f6f6f6"
+        self.master.config(background=background_color)
+        self.frame.config(background=background_color)
+        self.time_label.config(background=background_color)
         self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def change_control(self, control):
