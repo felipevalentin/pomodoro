@@ -25,7 +25,6 @@ class Pomodoro:
         self.reset_button = tk.Button(self.frame, text = 'reset', command = self.reset, width=17)
         self.display_on_window()
         self.run = True
-        self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
     
     def window_config(self):
         self.master.title("Pomodoro")
