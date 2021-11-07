@@ -31,12 +31,12 @@ class Timer():
             func()
             self.thread = threading.Timer(SECOND, self.timer_with_call, [func])
             self.thread.start()
-    
+
     def stop(self):
         if self.run:
             self.run = False
             self.thread.cancel()
-    
+
     def reset(self):
         self.control = "reset"
 
@@ -50,6 +50,7 @@ class Timer():
         self.__control = control
         self.time = self.times[control]
 
+
 class Pomodoro:
     def __init__(self):
         self.master = tk.Tk()
@@ -57,7 +58,7 @@ class Pomodoro:
         self.timer = Timer()
 
         # Buttons
-        self.focus_button = tk.Button(self.frame, text='Focus', command=lambda: self.change_control("focus") , width=17)
+        self.focus_button = tk.Button(self.frame, text='Focus', command=lambda: self.change_control("focus"), width=17)
         self.long_break_button = tk.Button(self.frame, text='Long Break', command=lambda: self.change_control("long"), width=17)
         self.reset_button = tk.Button(self.frame, text='reset', command=lambda: self.change_control("reset"), width=17)
         self.short_break_button = tk.Button(self.frame, text='Short Break', command=lambda: self.change_control("short"), width=17)
