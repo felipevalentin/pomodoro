@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import messagebox
 
 import time
 
@@ -59,12 +58,11 @@ class Pomodoro:
         self.update_time(25*60)
 
     def timer(self):
-        while self.total > 0 and self.run:
+        while self.run and self.total > 0:
             self.update_time(self.total - 1)
             time.sleep(1)
         if self.total == 0:
             self.master.attributes("-topmost", True)
-            messagebox.showinfo("Pomodoro", "Concluído!")
             self.master.attributes("-topmost", False)
     
     def on_closing(self):
