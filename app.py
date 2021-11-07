@@ -58,8 +58,8 @@ class Pomodoro:
         self.timer = Timer()
 
         # Buttons
-        button_width = 15
-        button_collor = "#d8d8d8"
+        button_width = 14
+        button_collor = "#dedede"
         self.focus_button = tk.Button(self.frame, text='Focus', command=lambda: self.change_control("focus"), width=button_width, border="0", bg=button_collor)
         self.long_break_button = tk.Button(self.frame, text='Long Break', command=lambda: self.change_control("long"), width=button_width, border="0", bg=button_collor)
         self.reset_button = tk.Button(self.frame, text='Reset', command=lambda: self.change_control("reset"), width=button_width, border="0", bg=button_collor)
@@ -84,11 +84,11 @@ class Pomodoro:
         self.start_button.grid(row=2, column=0)
         self.stop_button.grid(row=2, column=1)
         self.reset_button.grid(row=2, column=2)
-        self.frame.pack(pady=1, padx=1)
+        self.frame.pack(pady=4, padx=0)
 
     def window_config(self):
         self.master.title("Pomodoro")
-        self.master.geometry("440x156")
+        self.master.geometry("429x162")
         self.master.resizable(width=False, height=False)
         background_color = "#f6f6f6"
         self.master.config(background=background_color)
