@@ -14,6 +14,11 @@ class Pomodoro:
 
         # Timer
         self.time = DEFAULT_FOCUS
+        self.times = {"focus": DEFAULT_FOCUS,
+                      "short": DEFAULT_SHORT,
+                      "long": DEFAULT_LONG}
+        self.control = "focus"
+        self.time = self.times[self.control]
         self.time_string = tk.StringVar()
         self.thread = None
         self.run = False
@@ -49,12 +54,12 @@ class Pomodoro:
         self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def focus(self):
-        self.update_time(DEFAULT_FOCUS)
-        self.start()
+        self.control = "focus"
+        self.reset()
 
     def long_break(self):
-        self.update_time(DEFAULT_LONG)
-        self.start()
+        self.control = "long"
+        self.reset()
 
     def on_closing(self):
         self.stop()
@@ -62,11 +67,13 @@ class Pomodoro:
 
     def reset(self):
         self.stop()
-        self.update_time(DEFAULT_FOCUS)
+        self.time = self.times[self.control]
+        self.update_time(self.time)
+
 
     def short_break(self):
-        self.update_time(DEFAULT_SHORT)
-        self.start()
+        self.control = "short"
+        self.reset()
 
     def start(self):
         if not self.run:
