@@ -67,7 +67,7 @@ class Pomodoro:
 
         # Labels
         self.time_string = tk.StringVar()
-        self.time_label = tk.Entry(self.frame, textvariable=self.time_string, font=(None, 40,), width=0)
+        self.time_label = tk.Label(self.frame, textvariable=self.time_string, font=(None, 40,), width=0)
 
         self.display_on_window()
         self.update_time()
