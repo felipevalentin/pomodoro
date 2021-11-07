@@ -1,5 +1,5 @@
 # Pomodoro
-A python pomodoro with tkinter and threads
+A Python Pomodoro with Tkinter and Threads
 
 ## Pomodoro Running
 
