@@ -30,6 +30,7 @@ class Pomodoro:
     def window_config(self):
         self.master.title("Pomodoro")
         self.master.geometry("500x185")
+        self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def display_on_window(self):
         self.time_label.grid(row=1, column=1, pady=25)
