@@ -95,6 +95,7 @@ class Pomodoro:
         self.frame.config(background=self.background_color)
         self.time_label.config(background=self.background_color)
         self.master.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.master.eval('tk::PlaceWindow . center')
 
     def button_config(self):
         for button in self.buttons:
@@ -121,8 +122,12 @@ class Pomodoro:
         min, sec = divmod(time, MINUTE_IN_SECONDS)
         self.time_string.set(f"{min:>02}:{sec:>02}")
         if time == 0:
-            self.master.attributes("-topmost", True)
-            self.master.attributes("-topmost", False)
+            self.finish()
+
+    def finish(self):
+        self.master.bell()
+        self.master.attributes("-topmost", True)
+        self.master.attributes("-topmost", False)
 
 
 def main():
